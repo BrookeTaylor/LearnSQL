@@ -193,5 +193,65 @@ JOIN products ON orders.product_id = products.product_id
 ORDER BY order_id;
 
 
+-- Show all products in the Flooring department that cost more than $45.
+SELECT product_name, category, price 
+FROM products
+WHERE price > 45 AND department = 'Flooring'
+ORDER BY price DESC;
+
+
+/* 
+Show every order that includes a product from the Electrical department.
+
+results should include order_id, order_date, customer's first_name, last_name, 
+product_name, department, quantity
+*/
+SELECT order_id, order_date, customers.first_name, customers.last_name, 
+	products.product_name, products.department, quantity
+FROM orders
+JOIN products ON orders.product_id = products.product_id
+JOIN customers ON orders.customer_id = customers.customer_id 
+WHERE products.department = 'Electrical';
+
+
+/* 
+Which customer has spent the most money total?
+
+include: first_name, last_name, total_spent
+*/
+SELECT customers.first_name, customers.last_name, SUM(quantity * products.price) AS total_spent
+FROM orders 
+JOIN products ON orders.product_id = products.product_id
+JOIN customers ON orders.customer_id = customers.customer_id 
+GROUP BY customers.customer_id
+ORDER BY total_spent DESC
+LIMIT 1;
+
+
+/* 
+Show all orders where the customer ordered more than 5 units 
+and the product is in the Flooring department.
+
+Include: order_id, first_name, last_name, product_name, quantity, department, 
+total_price (quantity * price)
+*/
+SELECT o.order_id, c.first_name, c.last_name, p.product_name, o.quantity, p.department, 
+	(o.quantity * p.price) AS total_price 
+FROM orders AS o
+JOIN products AS P ON o.product_id = p.product_id
+JOIN customers AS c ON o.customer_id = c.customer_id 
+WHERE o.quantity > 5 AND department = 'Flooring';
+    
+
+/*
+Using the Products table, figure out which department has the highest total inventory value.
+*/
+SELECT department, SUM(price * stock_qty) AS total_inventory_value 
+FROM products
+GROUP BY department 
+ORDER BY total_inventory_value DESC
+LIMIT 1;
+
+
 DROP DATABASE lowes;
 
