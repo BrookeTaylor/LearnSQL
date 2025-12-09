@@ -253,5 +253,24 @@ ORDER BY total_inventory_value DESC
 LIMIT 1;
 
 
+/*
+Only have time for the one question tonight. Today was my first 12 hour shift, 4 more to go. Yay ^^;
+
+Show all orders for products priced over $100.alter
+
+order_id, order_date, customer first_name, customer last_name, product_name, price, quantity
+*/
+SELECT o.order_id, o.order_date, c.first_name, c.last_name, p.product_name, 
+	p.price, o.quantity
+FROM orders AS o
+JOIN products AS P ON o.product_id = p.product_id
+JOIN customers AS c ON o.customer_id = c.customer_id 
+WHERE price > 100
+ORDER BY price DESC;
+
+
+SELECT * FROM customers;
+SELECT * FROM products;
+SELECT * FROM orders;
 DROP DATABASE lowes;
 
